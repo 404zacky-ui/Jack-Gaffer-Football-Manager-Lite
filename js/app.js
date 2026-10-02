@@ -13,16 +13,6 @@ function render(){
  app.querySelectorAll('[data-act="save"]').forEach(b=>b.onclick=()=>{const blob=exportGame(state); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jack-gaffer-save.json';a.click();URL.revokeObjectURL(a.href);});
  saveGame(state);
 }
-
-function runMatch(){
- const fixture=state.fixtures?.find(f=>f.round===state.round&&!f.played);
- if(!fixture){alert('No fixture available.');return;}
- const home=state.clubs.find(c=>c.id===fixture.homeId),away=state.clubs.find(c=>c.id===fixture.awayId);
- const result=simulateMatch(home,away,hash(fixture.homeId+fixture.awayId+state.round));
- fixture.played=true;fixture.score=[result.teams[0].stats.goals,result.teams[1].stats.goals];
- state.round=Math.min(18,state.round+1);saveGame(state);alert(`${home.name} ${fixture.score[0]}–${fixture.score[1]} ${away.name}`);render();
-}
+function runMatch(){const fixture=state.fixtures?.find(f=>f.round===state.round&&!f.played);if(!fixture){alert('No fixture available.');return;}const home=state.clubs.find(c=>c.id===fixture.homeId),away=state.clubs.find(c=>c.id===fixture.awayId);const result=simulateMatch(home,away,hash(fixture.homeId+fixture.awayId+state.round));fixture.played=true;fixture.score=[result.teams[0].stats.goals,result.teams[1].stats.goals];state.round=Math.min(18,state.round+1);saveGame(state);alert(`${home.name} ${fixture.score[0]}–${fixture.score[1]} ${away.name}`);render();}
 function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
-
-render();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
