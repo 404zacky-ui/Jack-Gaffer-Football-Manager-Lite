@@ -1,0 +1,15 @@
+name: Release Sync
+on:
+  workflow_dispatch:
+    inputs:
+      release_url:
+        description: "Public URL containing release ZIP"
+        required: true
+        type: string
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Note
+        run: echo "Release sync workflow is intentionally manual."
